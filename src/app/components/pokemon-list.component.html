@@ -1,0 +1,22 @@
+<div class="toolbar">
+  <button (click)="sortByNameAsc()">Sort by Name A–Z</button>
+  <button (click)="sortByNameDesc()">Sort by Name Z–A</button>
+  <button (click)="sortByMoveAsc()">Sort by Move A–Z</button>
+  <button (click)="sortByMoveDesc()">Sort by Move Z–A</button>
+</div>
+
+<div class="pokemon-list">
+  @for (p of pokemons; track p.name) {
+    <div class="pokemon-card">
+      <img [src]="p.image" alt="{{ p.name }}">
+      <h3>{{ p.name | titlecase }}</h3>
+      <ul>
+        @for (move of p.moves; track move) {
+          <li>{{ move }}</li>
+        }
+      </ul>
+    </div>
+  }
+</div>
+
+<button class="reload-button" (click)="loadPokemons()">⟳</button>

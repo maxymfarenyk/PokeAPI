@@ -1,0 +1,129 @@
+.pokemon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin: 1.5rem auto;
+  max-width: 480px;
+  padding-bottom: 120px;
+  background: #fafafa;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+}
+
+.pokemon-card {
+  background: #ffffff;
+  padding: 1.25rem 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  img {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: #eaeaea;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+
+    .name {
+      font-weight: 700;
+      font-size: 1.25rem;
+      text-transform: capitalize;
+      margin-bottom: 0.25rem;
+    }
+
+    .moves {
+      font-size: 0.9rem;
+      color: #666;
+      display: flex;
+      gap: 0.5rem;
+
+      span {
+        background: #e0e7ff;
+        color: #3b49df;
+        padding: 0.2rem 0.6rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+    }
+  }
+}
+
+.toolbar {
+  position: sticky;
+  top: 0;
+  background: #ffffff;
+  padding: 1rem 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+
+  button {
+    background: #3b49df;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(59, 73, 223, 0.4);
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background: #2a358f;
+      box-shadow: 0 4px 12px rgba(42, 53, 143, 0.6);
+    }
+
+    &:focus {
+      outline: 2px solid #2431a4;
+      outline-offset: 2px;
+    }
+  }
+}
+
+.reload-button {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #e53935;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(229, 57, 53, 0.6);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  &:hover {
+    background-color: #b71c1c;
+    transform: translateX(-50%) scale(1.1);
+    box-shadow: 0 8px 18px rgba(183, 28, 28, 0.8);
+  }
+
+  &:focus {
+    outline: 3px solid #f44336;
+    outline-offset: 4px;
+  }
+}
