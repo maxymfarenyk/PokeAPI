@@ -12,6 +12,7 @@ import { PokemonService } from '../services/pokemon.service';
 export class PokemonListComponent {
   pokemons: any[] = [];
   isLoading = false;
+  errorMessage = '';
 
   constructor(private pokemonService: PokemonService) {
     this.loadPokemons();
@@ -19,6 +20,8 @@ export class PokemonListComponent {
 
   loadPokemons(): void {
     this.isLoading = true;
+    this.errorMessage = ''; // Очищаємо попередні помилки
+    
     this.pokemonService.getRandomPokemons().subscribe({
       next: (data) => {
         this.pokemons = data.map(p => ({
@@ -30,9 +33,14 @@ export class PokemonListComponent {
       },
       error: (error) => {
         console.error('Error loading pokemons:', error);
+        this.errorMessage = error.message || 'Failed to load Pokémon. Please try again.';
         this.isLoading = false;
       }
     });
+  }
+
+  retryLoad(): void {
+    this.loadPokemons();
   }
 
   sortByNameAsc(): void {

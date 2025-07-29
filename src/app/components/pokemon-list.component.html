@@ -10,6 +10,13 @@
     <div class="loading-spinner"></div>
     <p class="loading-text">Loading Pokémon...</p>
   </div>
+} @else if (errorMessage) {
+  <div class="error-container">
+    <div class="error-icon">⚠️</div>
+    <h3 class="error-title">Oops! Something went wrong</h3>
+    <p class="error-message">{{ errorMessage }}</p>
+    <button class="retry-button" (click)="retryLoad()">Try Again</button>
+  </div>
 } @else {
   <div class="pokemon-list">
     @for (p of pokemons; track p.name) {
