@@ -11,18 +11,27 @@ import { PokemonService } from '../services/pokemon.service';
 })
 export class PokemonListComponent {
   pokemons: any[] = [];
+  isLoading = false;
 
   constructor(private pokemonService: PokemonService) {
     this.loadPokemons();
   }
 
   loadPokemons(): void {
-    this.pokemonService.getRandomPokemons().subscribe(data => {
-      this.pokemons = data.map(p => ({
-        name: p.name,
-        image: p.sprites.front_default,
-        moves: p.moves.slice(0, 2).map((m: any) => m.move.name),
-      }));
+    this.isLoading = true;
+    this.pokemonService.getRandomPokemons().subscribe({
+      next: (data) => {
+        this.pokemons = data.map(p => ({
+          name: p.name,
+          image: p.sprites.front_default,
+          moves: p.moves.slice(0, 2).map((m: any) => m.move.name),
+        }));
+        this.isLoading = false;
+      },
+      error: (error) => {
+        console.error('Error loading pokemons:', error);
+        this.isLoading = false;
+      }
     });
   }
 

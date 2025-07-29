@@ -5,18 +5,25 @@
   <button (click)="sortByMoveDesc()">Sort by Move Z–A</button>
 </div>
 
-<div class="pokemon-list">
-  @for (p of pokemons; track p.name) {
-    <div class="pokemon-card">
-      <img [src]="p.image" alt="{{ p.name }}">
-      <h3>{{ p.name | titlecase }}</h3>
-      <ul>
-        @for (move of p.moves; track move) {
-          <li>{{ move }}</li>
-        }
-      </ul>
-    </div>
-  }
-</div>
+@if (isLoading) {
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading Pokémon...</p>
+  </div>
+} @else {
+  <div class="pokemon-list">
+    @for (p of pokemons; track p.name) {
+      <div class="pokemon-card">
+        <img [src]="p.image" alt="{{ p.name }}">
+        <h3>{{ p.name | titlecase }}</h3>
+        <ul>
+          @for (move of p.moves; track move) {
+            <li>{{ move }}</li>
+          }
+        </ul>
+      </div>
+    }
+  </div>
+}
 
-<button class="reload-button" (click)="loadPokemons()">⟳</button>
+<button class="reload-button" (click)="loadPokemons()" [disabled]="isLoading">⟳</button>
