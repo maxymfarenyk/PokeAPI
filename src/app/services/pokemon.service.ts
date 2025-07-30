@@ -20,6 +20,10 @@ export class PokemonService {
     return forkJoin(requests);
   }
 
+  getPokemonById(id: number): Observable<any> {
+    return this.getPokemonWithRetry(id);
+  }
+
   private getPokemonWithRetry(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/${id}`).pipe(
       retry({

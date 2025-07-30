@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
-import { PokemonListComponent } from './app/components/pokemon-list.component';
+import { App } from './app/app';
 
-bootstrapApplication(PokemonListComponent, appConfig)
+bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));

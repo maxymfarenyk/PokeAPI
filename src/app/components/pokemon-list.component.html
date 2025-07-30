@@ -20,7 +20,7 @@
 } @else {
   <div class="pokemon-list">
     @for (p of pokemons; track p.name) {
-      <div class="pokemon-card">
+      <div class="pokemon-card" (click)="navigateToDetail(p.id)">
         <img [src]="p.image" alt="{{ p.name }}">
         <h3>{{ p.name | titlecase }}</h3>
         <ul>

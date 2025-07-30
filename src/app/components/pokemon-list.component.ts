@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { PokemonService } from '../services/pokemon.service';
 
 @Component({
@@ -14,17 +15,21 @@ export class PokemonListComponent {
   isLoading = false;
   errorMessage = '';
 
-  constructor(private pokemonService: PokemonService) {
+  constructor(
+    private pokemonService: PokemonService,
+    private router: Router
+  ) {
     this.loadPokemons();
   }
 
   loadPokemons(): void {
     this.isLoading = true;
-    this.errorMessage = ''; // Очищаємо попередні помилки
+    this.errorMessage = '';
     
     this.pokemonService.getRandomPokemons().subscribe({
       next: (data) => {
         this.pokemons = data.map(p => ({
+          id: p.id, // Додаємо ID покемона
           name: p.name,
           image: p.sprites.front_default,
           moves: p.moves.slice(0, 2).map((m: any) => m.move.name),
@@ -37,6 +42,10 @@ export class PokemonListComponent {
         this.isLoading = false;
       }
     });
+  }
+
+  navigateToDetail(id: number): void {
+    this.router.navigate(['/pokemon', id]);
   }
 
   retryLoad(): void {
