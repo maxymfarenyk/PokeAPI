@@ -90,7 +90,7 @@ interface PokemonListItem {
 
 ## 🔧 Technical Stack
 
-- **Angular 17**: Standalone components
+- **Angular 17+**: Standalone components
 - **TypeScript**: Full type safety
 - **RxJS**: Reactive programming
 - **SCSS**: Advanced styling
