@@ -13,7 +13,7 @@
 } @else if (pokemon) {
   <div class="pokemon-detail">
     <button class="back-button" (click)="goBack()">← Back to List</button>
-    
+
     <div class="pokemon-header">
       <img [src]="pokemon.sprites.front_default" [alt]="pokemon.name">
       <h1>{{ pokemon.name | titlecase }}</h1>
@@ -49,4 +49,4 @@
       </div>
     </div>
   </div>
-} 
+}

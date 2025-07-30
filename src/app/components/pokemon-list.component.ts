@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PokemonService } from '../services/pokemon.service';
+import { Pokemon, PokemonListItem } from '../types/pokemon.types';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -11,7 +12,7 @@ import { PokemonService } from '../services/pokemon.service';
   styleUrls: ['./pokemon-list.component.scss'],
 })
 export class PokemonListComponent {
-  pokemons: any[] = [];
+  pokemons: PokemonListItem[] = [];
   isLoading = false;
   errorMessage = '';
 
@@ -28,12 +29,12 @@ export class PokemonListComponent {
     
     this.pokemonService.getRandomPokemons().subscribe({
       next: (data) => {
-        this.pokemons = data.map(p => ({
-          id: p.id, // Додаємо ID покемона
-          name: p.name,
-          image: p.sprites.front_default,
-          moves: p.moves.slice(0, 2).map((m: any) => m.move.name),
-        }));
+      this.pokemons = data.map(p => ({
+        id: p.id,
+        name: p.name,
+        image: p.sprites.front_default,
+        moves: p.moves.slice(0, 2).map(m => m.move.name),
+      }));
         this.isLoading = false;
       },
       error: (error) => {

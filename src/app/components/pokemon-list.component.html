@@ -18,19 +18,19 @@
     <button class="retry-button" (click)="retryLoad()">Try Again</button>
   </div>
 } @else {
-  <div class="pokemon-list">
-    @for (p of pokemons; track p.name) {
+<div class="pokemon-list">
+  @for (p of pokemons; track p.name) {
       <div class="pokemon-card" (click)="navigateToDetail(p.id)">
-        <img [src]="p.image" alt="{{ p.name }}">
-        <h3>{{ p.name | titlecase }}</h3>
-        <ul>
-          @for (move of p.moves; track move) {
-            <li>{{ move }}</li>
-          }
-        </ul>
-      </div>
-    }
-  </div>
+      <img [src]="p.image" alt="{{ p.name }}">
+      <h3>{{ p.name | titlecase }}</h3>
+      <ul>
+        @for (move of p.moves; track move) {
+          <li>{{ move }}</li>
+        }
+      </ul>
+    </div>
+  }
+</div>
 }
 
 <button class="reload-button" (click)="loadPokemons()" [disabled]="isLoading">⟳</button>

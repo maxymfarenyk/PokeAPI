@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { PokemonService } from '../services/pokemon.service';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {PokemonService} from '../services/pokemon.service';
+import {Pokemon} from '../types/pokemon.types';
 
 @Component({
   selector: 'app-pokemon-detail',
@@ -11,7 +12,7 @@ import { PokemonService } from '../services/pokemon.service';
   styleUrls: ['./pokemon-detail.component.scss']
 })
 export class PokemonDetailComponent implements OnInit {
-  pokemon: any = null;
+  pokemon: Pokemon | null = null;
   isLoading = false;
   errorMessage = '';
 
@@ -19,7 +20,8 @@ export class PokemonDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private pokemonService: PokemonService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -32,10 +34,10 @@ export class PokemonDetailComponent implements OnInit {
     if (!id) {
       id = +this.route.snapshot.params['id'];
     }
-    
+
     this.isLoading = true;
     this.errorMessage = '';
-    
+
     this.pokemonService.getPokemonById(id).subscribe({
       next: (data) => {
         this.pokemon = data;
@@ -52,4 +54,4 @@ export class PokemonDetailComponent implements OnInit {
   goBack(): void {
     this.router.navigate(['/']);
   }
-} 
+}

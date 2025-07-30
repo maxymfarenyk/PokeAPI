@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { forkJoin, Observable, throwError, timer } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
+import { Pokemon } from '../types/pokemon.types';
 
 const MAX_POKEMON_ID = 1025;
 const DEFAULT_POKEMON_COUNT = 15;
@@ -13,19 +14,19 @@ export class PokemonService {
   private apiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
   constructor(private http: HttpClient) {}
-
-  getRandomPokemons(count = DEFAULT_POKEMON_COUNT): Observable<any[]> {
+  
+  getRandomPokemons(count = DEFAULT_POKEMON_COUNT): Observable<Pokemon[]> {
     const ids = Array.from({ length: count }, () => Math.floor(Math.random() * MAX_POKEMON_ID) + 1);
     const requests = ids.map(id => this.getPokemonWithRetry(id));
     return forkJoin(requests);
   }
 
-  getPokemonById(id: number): Observable<any> {
+  getPokemonById(id: number): Observable<Pokemon> {
     return this.getPokemonWithRetry(id);
   }
 
-  private getPokemonWithRetry(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/${id}`).pipe(
+  private getPokemonWithRetry(id: number): Observable<Pokemon> {
+    return this.http.get<Pokemon>(`${this.apiUrl}/${id}`).pipe(
       retry({
         count: MAX_RETRIES,
         delay: (error, retryCount) => {
