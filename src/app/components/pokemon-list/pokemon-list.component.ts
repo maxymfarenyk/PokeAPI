@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PokemonService } from '../services/pokemon.service';
-import { Pokemon, PokemonListItem } from '../types/pokemon.types';
+import { PokemonService } from '../../services/pokemon.service';
+import { PokemonListItem } from '../../types/pokemon.types';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -26,7 +26,7 @@ export class PokemonListComponent {
   loadPokemons(): void {
     this.isLoading = true;
     this.errorMessage = '';
-    
+
     this.pokemonService.getRandomPokemons().subscribe({
       next: (data) => {
       this.pokemons = data.map(p => ({
