@@ -1,0 +1,36 @@
+<div class="toolbar">
+  <button (click)="sortByNameAsc()">Sort by Name A–Z</button>
+  <button (click)="sortByNameDesc()">Sort by Name Z–A</button>
+  <button (click)="sortByMoveAsc()">Sort by Move A–Z</button>
+  <button (click)="sortByMoveDesc()">Sort by Move Z–A</button>
+</div>
+
+@if (isLoading) {
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading Pokémon...</p>
+  </div>
+} @else if (errorMessage) {
+  <div class="error-container">
+    <div class="error-icon">⚠️</div>
+    <h3 class="error-title">Oops! Something went wrong</h3>
+    <p class="error-message">{{ errorMessage }}</p>
+    <button class="retry-button" (click)="retryLoad()">Try Again</button>
+  </div>
+} @else {
+<div class="pokemon-list">
+  @for (p of pokemons; track p.name) {
+      <div class="pokemon-card" (click)="navigateToDetail(p.id)">
+      <img [src]="p.image" alt="{{ p.name }}">
+      <h3>{{ p.name | titlecase }}</h3>
+      <ul>
+        @for (move of p.moves; track move) {
+          <li>{{ move }}</li>
+        }
+      </ul>
+    </div>
+  }
+</div>
+}
+
+<button class="reload-button" (click)="loadPokemons()" [disabled]="isLoading">⟳</button>

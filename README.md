@@ -1,59 +1,115 @@
-# PokeAPI
+# 🎮 PokeAPI Angular Application
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
+A modern Angular application that displays Pokémon data from the PokeAPI with TypeScript interfaces and optimized data architecture.
 
-## Development server
+## ✨ Features
 
-To start a local development server, run:
+- **Pokémon List**: Display random Pokémon with basic information
+- **Detailed View**: Navigate to individual Pokémon pages with comprehensive stats
+- **Loading States**: Visual feedback during data fetching
+- **Error Handling**: Graceful error handling with retry functionality
+- **Sorting**: Sort Pokémon by name and moves
+- **404 Page**: Custom not-found page for invalid routes
 
-```bash
-ng serve
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js (version 18 or higher)
+- npm or yarn
+
+### Installation
+
+1. **Clone and install**
+   ```bash
+   git clone <repository-url>
+   cd PokeAPI
+   npm install
+   ```
+
+2. **Start development server**
+   ```bash
+   npm start
+   ```
+
+3. **Open browser**
+   Navigate to `http://localhost:4200`
+
+## 📁 Project Structure
+
+```
+src/app/
+├── components/
+│   ├── pokemon-list.component.*     # Main Pokémon list
+│   ├── pokemon-detail.component.*   # Pokémon details
+│   └── not-found.component.*        # 404 page
+├── services/
+│   └── pokemon.service.ts           # API service
+├── types/
+│   └── pokemon.types.ts             # TypeScript interfaces
+├── app.config.ts                    # App configuration
+├── app.routes.ts                    # Routing
+└── app.ts                           # Root component
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🏗️ Data Architecture
 
-## Code scaffolding
+### TypeScript Interfaces
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+**Pokemon** (Complete Data):
+```typescript
+interface Pokemon {
+  id: number;
+  name: string;
+  sprites: { front_default: string };
+  types: Array<{ type: { name: string } }>;
+  stats: Array<{ stat: { name: string }; base_stat: number }>;
+  moves: Array<{ move: { name: string } }>;
+}
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
+**PokemonListItem** (Optimized for List):
+```typescript
+interface PokemonListItem {
+  id: number;
+  name: string;
+  image: string;
+  moves: string[];
+}
 ```
 
-## Building
+### Benefits
+- **Type Safety**: Compile-time error detection
+- **Performance**: Optimized data structures for different views
+- **Maintainability**: Clear data contracts and separation of concerns
 
-To build the project run:
+## 🎮 How to Use
 
-```bash
-ng build
-```
+- **Main Page**: View and sort Pokémon list, click cards for details
+- **Detail Page**: View comprehensive stats, types, and moves
+- **Navigation**: Use "Back to List" button to return
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## 🔧 Technical Stack
 
-## Running unit tests
+- **Angular 17+**: Standalone components
+- **TypeScript**: Full type safety
+- **RxJS**: Reactive programming
+- **SCSS**: Advanced styling
+- **PokeAPI**: Pokémon data source
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🐛 Error Handling
 
-```bash
-ng test
-```
+- Network errors with retry logic
+- 404 page for invalid routes
+- User-friendly error messages
 
-## Running end-to-end tests
+## 🚀 Future Enhancements
 
-For end-to-end (e2e) testing, run:
+- Search functionality
+- Favorites system
+- Advanced filtering
+- Evolution chains
+- Offline support
 
-```bash
-ng e2e
-```
+---
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+**Happy Pokémon hunting! 🎮✨**
