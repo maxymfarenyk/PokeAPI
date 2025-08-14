@@ -1,0 +1,17 @@
+.status-banner {
+  padding: 4px 12px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: bold;
+  color: white;
+  min-width: 60px;
+
+  &.online {
+    background-color: #4caf50; // зелений
+  }
+
+  &.offline {
+    background-color: #f44336; // червоний
+  }
+}

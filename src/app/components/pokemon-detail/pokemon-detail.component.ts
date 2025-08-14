@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
+import {OnlineStatusBannerComponent} from '../online-status-banner/online-status-banner.component';
 
 @Component({
   selector: 'app-pokemon-detail',
@@ -22,7 +23,8 @@ import { MatDividerModule } from '@angular/material/divider';
     MatIconModule,
     MatToolbarModule,
     MatChipsModule,
-    MatDividerModule
+    MatDividerModule,
+    OnlineStatusBannerComponent
   ],
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.scss']
