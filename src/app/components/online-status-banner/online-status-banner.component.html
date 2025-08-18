@@ -1,0 +1,5 @@
+<mat-card
+  class="status-banner"
+  [ngClass]="(onlineSvc.isOnline$ | async) ? 'online' : 'offline'">
+  {{ (onlineSvc.isOnline$ | async) ? 'You are online' : 'You are offline' }}
+</mat-card>

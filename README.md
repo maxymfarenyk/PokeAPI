@@ -1,11 +1,13 @@
-# 🎮 PokeAPI Angular Application
+# 🎮 PokeAPI PWA - Angular Application
 
-A modern Angular application that displays Pokémon data from the PokeAPI with TypeScript interfaces and optimized data architecture.
+A modern Progressive Web Application built with Angular and Material Design that displays Pokémon data from the PokeAPI with TypeScript interfaces and optimized data architecture.
 
 ## ✨ Features
 
 - **Pokémon List**: Display random Pokémon with basic information
 - **Detailed View**: Navigate to individual Pokémon pages with comprehensive stats
+- **PWA Support**: Offline access, installable, service worker caching
+- **Connection Status**: Real-time network connectivity indicator
 - **Loading States**: Visual feedback during data fetching
 - **Error Handling**: Graceful error handling with retry functionality
 - **Sorting**: Sort Pokémon by name and moves
@@ -31,7 +33,13 @@ A modern Angular application that displays Pokémon data from the PokeAPI with T
    npm start
    ```
 
-3. **Open browser**
+3. **Build for PWA**
+  ```bash
+  npm run build
+  npm run serve-pwa
+  ```
+
+4. **Open browser**
    Navigate to `http://localhost:4200`
 
 ## 📁 Project Structure
@@ -39,11 +47,15 @@ A modern Angular application that displays Pokémon data from the PokeAPI with T
 ```
 src/app/
 ├── components/
-│   ├── pokemon-list.component.*     # Main Pokémon list
-│   ├── pokemon-detail.component.*   # Pokémon details
-│   └── not-found.component.*        # 404 page
+│   ├── not-found/                   # 404 page
+│   ├── online-status-banner/        # Network status indicator
+│   ├── pokemon-detail/              # Pokémon details 
+│   └── pokemon-list/                # Main Pokémon list
+├── constants/
+│   └── app.constants.ts             # Application constants
 ├── services/
-│   └── pokemon.service.ts           # API service
+│   ├── online-status.service.ts     # Network connectivity monitoring
+│   └── pokemon.service.ts           # API service with caching
 ├── types/
 │   └── pokemon.types.ts             # TypeScript interfaces
 ├── app.config.ts                    # App configuration
@@ -82,18 +94,40 @@ interface PokemonListItem {
 - **Performance**: Optimized data structures for different views
 - **Maintainability**: Clear data contracts and separation of concerns
 
+## 📱 PWA Features
+
+- **Offline Support**: Browse previously visited Pokémon without internet
+- **Installable**: Add to home screen on mobile and desktop
+- **Service Worker**: Background sync and caching strategies
+- **Performance**: Cache-first strategy for images and API data
+
+### PWA Installation
+**Desktop**: Click install prompt in browser address bar  
+**Mobile**: Browser menu → "Add to Home Screen"
+
+## 🎨 Material Design
+
+- **Angular Material**: Complete Material Design component library
+- **Components Used**: mat-card, mat-toolbar, mat-button, mat-progress-spinner, mat-snack-bar, mat-icon, mat-badge
+- **Responsive Design**: Mobile-first approach with Material guidelines
+- **Accessibility**: Full WCAG compliance with Material components
+
 ## 🎮 How to Use
 
-- **Main Page**: View and sort Pokémon list, click cards for details
+- **Main Page**: View and sort Pokémon list, click cards for details, check connection status banner
 - **Detail Page**: View comprehensive stats, types, and moves
+- **Connection Status**: Real-time indicator shows network connectivity
+- **Offline Mode**: Previously viewed Pokémon remain accessible when offline
 - **Navigation**: Use "Back to List" button to return
 
 ## 🔧 Technical Stack
 
 - **Angular 17+**: Standalone components
+- **Angular Material**: Material Design component library
 - **TypeScript**: Full type safety
+- **Angular Service Worker**: PWA functionality
 - **RxJS**: Reactive programming
-- **SCSS**: Advanced styling
+- **SCSS**: Advanced styling with Material theming
 - **PokeAPI**: Pokémon data source
 
 ## 🐛 Error Handling
@@ -101,6 +135,7 @@ interface PokemonListItem {
 - Network errors with retry logic
 - 404 page for invalid routes
 - User-friendly error messages
+- Offline mode indicators and cached content fallbacks
 
 ## 🚀 Future Enhancements
 
@@ -108,8 +143,7 @@ interface PokemonListItem {
 - Favorites system
 - Advanced filtering
 - Evolution chains
-- Offline support
 
 ---
 
-**Happy Pokémon hunting! 🎮✨**
+**Install as PWA for the best Pokémon hunting experience! 🎮✨📱**
