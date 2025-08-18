@@ -3,19 +3,13 @@ import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {forkJoin, Observable, throwError, timer, of} from 'rxjs';
 import {catchError, retry, switchMap} from 'rxjs/operators';
 import {Pokemon} from '../types/pokemon.types';
-
-const MAX_POKEMON_ID = 1025;
-const DEFAULT_POKEMON_COUNT = 15;
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second
-const PIKACHU_ID = 25;
+import {MAX_POKEMON_ID, DEFAULT_POKEMON_COUNT, MAX_RETRIES, RETRY_DELAY, PIKACHU_ID} from '../constants/app.constants';
 
 @Injectable({providedIn: 'root'})
 export class PokemonService {
   private apiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
   constructor(private http: HttpClient) {
-    this.ensurePikachuCached();
   }
 
   getPokemonById(id: number): Observable<Pokemon> {
@@ -40,10 +34,6 @@ export class PokemonService {
     return forkJoin(requests);
   }
 
-  getPikachuOffline(): Observable<Pokemon> {
-    return this.getPokemonById(PIKACHU_ID);
-  }
-
   get isOffline(): boolean {
     return !navigator.onLine;
   }
@@ -59,27 +49,6 @@ export class PokemonService {
       }),
       catchError(error => this.handleError(error, id))
     );
-  }
-
-  private ensurePikachuCached(): void {
-    if (navigator.onLine) {
-      this.getPokemonById(PIKACHU_ID).subscribe({
-        next: (pokemon) => {
-          console.log('Pikachu pre-cached for offline use');
-          this.preloadPikachuImage(pokemon.sprites?.front_default);
-        },
-        error: (error) => console.warn('Failed to pre-cache Pikachu:', error)
-      });
-    }
-  }
-
-  private preloadPikachuImage(imageUrl: string | undefined): void {
-    if (imageUrl) {
-      const img = new Image();
-      img.onload = () => console.log('Pikachu image pre-cached');
-      img.onerror = (error) => console.warn('Failed to pre-cache Pikachu image:', error);
-      img.src = imageUrl;
-    }
   }
 
   private handleError(error: HttpErrorResponse, pokemonId?: number): Observable<never> {

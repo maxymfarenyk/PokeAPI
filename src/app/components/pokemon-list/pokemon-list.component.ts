@@ -11,6 +11,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatIconModule} from '@angular/material/icon';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {OnlineStatusBannerComponent} from '../online-status-banner/online-status-banner.component';
+import {PIKACHU_ID} from '../../constants/app.constants';
 
 @Component({
   selector: 'app-pokemon-list',
@@ -32,6 +33,17 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   isLoading = false;
   errorMessage = '';
   private destroy$ = new Subject<void>();
+  private onlineHandler = () => {
+    if (!this.pokemonService.isOffline && this.pokemons.length === 0) {
+      this.loadPokemons();
+    }
+  };
+
+  private offlineHandler = () => {
+    if (this.pokemonService.isOffline) {
+      this.loadPokemonOffline(PIKACHU_ID);
+    }
+  };
 
   constructor(
     public pokemonService: PokemonService,
@@ -39,29 +51,23 @@ export class PokemonListComponent implements OnInit, OnDestroy {
   ) {
   }
 
+
   ngOnInit(): void {
     if (this.pokemonService.isOffline) {
-      this.loadPikachuOffline();
+      this.loadPokemonOffline(PIKACHU_ID);
     } else {
       this.loadPokemons();
     }
 
-    window.addEventListener('online', () => {
-      if (!this.pokemonService.isOffline && this.pokemons.length === 0) {
-        this.loadPokemons();
-      }
-    });
-
-    window.addEventListener('offline', () => {
-      if (this.pokemonService.isOffline) {
-        this.loadPikachuOffline();
-      }
-    });
+    window.addEventListener('online', this.onlineHandler);
+    window.addEventListener('offline', this.offlineHandler);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    window.removeEventListener('online', this.onlineHandler);
+    window.removeEventListener('offline', this.offlineHandler);
   }
 
   loadPokemons(): void {
@@ -75,7 +81,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
           this.errorMessage = error.message || 'Failed to load Pokémon. Please try again.';
           this.isLoading = false;
           if (this.pokemonService.isOffline) {
-            this.loadPikachuOffline();
+            this.loadPokemonOffline(PIKACHU_ID);
           }
           return [];
         })
@@ -98,16 +104,16 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       });
   }
 
-  loadPikachuOffline(): void {
+  loadPokemonOffline(id: number): void {
     this.isLoading = true;
     this.errorMessage = '';
     this.pokemons = [];
 
-    this.pokemonService.getPikachuOffline()
+    this.pokemonService.getPokemonById(id)
       .pipe(
         takeUntil(this.destroy$),
         catchError(error => {
-          console.warn('Failed to load cached Pikachu:', error);
+          console.warn('Failed to load cached Pokémon:', error);
           this.errorMessage = 'No cached Pokémon available offline. Please connect to the internet.';
           this.isLoading = false;
           return [];
@@ -126,7 +132,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
           this.isLoading = false;
         },
         error: (error) => {
-          console.error('Error loading cached Pikachu:', error);
+          console.error('Error loading cached Pokémon:', error);
           this.errorMessage = 'Failed to load cached Pokémon.';
           this.isLoading = false;
         }
@@ -139,7 +145,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
 
   retryLoad(): void {
     if (this.pokemonService.isOffline) {
-      this.loadPikachuOffline();
+      this.loadPokemonOffline(PIKACHU_ID);
     } else {
       this.loadPokemons();
     }
@@ -168,6 +174,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
       return moveA2.localeCompare(moveB2);
     });
   }
+
   sortByMoveDesc(): void {
     this.pokemons.sort((a, b) => {
       const moveA1 = b.moves[0] || '';

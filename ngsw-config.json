@@ -44,8 +44,8 @@
         "https://pokeapi.co/api/v2/pokemon/**"
       ],
       "cacheConfig": {
-        "strategy": "freshness",
-        "maxSize": 50,
+        "strategy": "performance",
+        "maxSize": 20,
         "maxAge": "1h",
         "timeout": "5s"
       }
@@ -57,8 +57,8 @@
       ],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 100,
-        "maxAge": "7d"
+        "maxSize": 20,
+        "maxAge": "1d"
       }
     }
   ]
