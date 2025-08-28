@@ -1,36 +1,74 @@
-<div class="toolbar">
-  <button (click)="sortByNameAsc()">Sort by Name A–Z</button>
-  <button (click)="sortByNameDesc()">Sort by Name Z–A</button>
-  <button (click)="sortByMoveAsc()">Sort by Move A–Z</button>
-  <button (click)="sortByMoveDesc()">Sort by Move Z–A</button>
+<mat-toolbar color="primary">
+  <span>Pokémon List</span>
+  <span class="toolbar-spacer"></span>
+  <online-status-banner></online-status-banner>
+</mat-toolbar>
+
+<div class="sort-container">
+  <button mat-raised-button color="accent" (click)="sortByNameAsc()">
+    <mat-icon>expand_less</mat-icon>
+    Sort by Name A–Z
+  </button>
+  <button mat-raised-button color="accent" (click)="sortByNameDesc()">
+    <mat-icon>expand_more</mat-icon>
+    Sort by Name Z–A
+  </button>
+  <button mat-raised-button color="accent" (click)="sortByMoveAsc()">
+    <mat-icon>expand_less</mat-icon>
+    Sort by Move A–Z
+  </button>
+  <button mat-raised-button color="accent" (click)="sortByMoveDesc()">
+    <mat-icon>expand_more</mat-icon>
+    Sort by Move Z–A
+  </button>
 </div>
 
 @if (isLoading) {
   <div class="loading-container">
-    <div class="loading-spinner"></div>
+    <mat-spinner diameter="60"></mat-spinner>
     <p class="loading-text">Loading Pokémon...</p>
   </div>
 } @else if (errorMessage) {
   <div class="error-container">
-    <div class="error-icon">⚠️</div>
-    <h3 class="error-title">Oops! Something went wrong</h3>
-    <p class="error-message">{{ errorMessage }}</p>
-    <button class="retry-button" (click)="retryLoad()">Try Again</button>
+    <mat-card>
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon class="error-icon">error</mat-icon>
+          <h3 class="error-title">Oops! Something went wrong</h3>
+          <p class="error-message">{{ errorMessage }}</p>
+          <button mat-raised-button color="warn" (click)="retryLoad()">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 } @else {
-<div class="pokemon-list">
-  @for (p of pokemons; track p.name) {
-      <div class="pokemon-card" (click)="navigateToDetail(p.id)">
-      <img [src]="p.image" alt="{{ p.name }}">
-      <h3>{{ p.name | titlecase }}</h3>
-      <ul>
-        @for (move of p.moves; track move) {
-          <li>{{ move }}</li>
-        }
-      </ul>
-    </div>
-  }
-</div>
+  <div class="pokemon-grid">
+    @for (p of pokemons; track p.name) {
+      <mat-card class="pokemon-card" (click)="navigateToDetail(p.id)">
+        <div class="pokemon-image-container">
+          <img [src]="p.image" [alt]="p.name" class="pokemon-image">
+        </div>
+        <mat-card-content>
+          <div class="pokemon-info">
+            <h3 class="pokemon-name">{{ p.name | titlecase }}</h3>
+            <div class="moves-section">
+              <h4>Moves:</h4>
+              <div class="moves-list">
+                @for (move of p.moves; track move) {
+                  <span class="move-tag">{{ move | titlecase }}</span>
+                }
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
 }
 
-<button class="reload-button" (click)="loadPokemons()" [disabled]="isLoading">⟳</button>
+<button mat-fab color="accent" class="reload-button" (click)="loadPokemons()" [disabled]="isLoading">
+  <mat-icon>refresh</mat-icon>
+</button>

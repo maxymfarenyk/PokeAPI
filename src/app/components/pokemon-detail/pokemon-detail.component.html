@@ -1,52 +1,91 @@
 @if (isLoading) {
   <div class="loading-container">
-    <div class="loading-spinner"></div>
+    <mat-spinner diameter="60"></mat-spinner>
     <p class="loading-text">Loading Pokémon details...</p>
   </div>
 } @else if (errorMessage) {
   <div class="error-container">
-    <div class="error-icon">⚠️</div>
-    <h3 class="error-title">Oops! Something went wrong</h3>
-    <p class="error-message">{{ errorMessage }}</p>
-    <button class="retry-button" (click)="loadPokemon()">Try Again</button>
+    <mat-card>
+      <mat-card-content>
+        <div class="error-content">
+          <mat-icon class="error-icon">error</mat-icon>
+          <h3 class="error-title">Oops! Something went wrong</h3>
+          <p class="error-message">{{ errorMessage }}</p>
+          <button mat-raised-button color="warn" (click)="loadPokemon()">
+            <mat-icon>refresh</mat-icon>
+            Try Again
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 } @else if (pokemon) {
   <div class="pokemon-detail">
-    <button class="back-button" (click)="goBack()">← Back to List</button>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="goBack()">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <span>Pokémon Details</span>
+      <span class="toolbar-spacer"></span>
+      <online-status-banner></online-status-banner>
+    </mat-toolbar>
 
-    <div class="pokemon-header">
-      <img [src]="pokemon.sprites.front_default" [alt]="pokemon.name">
-      <h1>{{ pokemon.name | titlecase }}</h1>
-      <div class="pokemon-types">
-        @for (type of pokemon.types; track type.type.name) {
-          <span class="type-badge">{{ type.type.name }}</span>
-        }
-      </div>
-    </div>
+    <div class="content-container">
+      <mat-card class="pokemon-card">
+        <div class="pokemon-header">
+          <img [src]="pokemon.sprites.front_default" [alt]="pokemon.name" class="pokemon-image">
+          <h1 class="pokemon-name">{{ pokemon.name | titlecase }}</h1>
+        </div>
 
-    <div class="pokemon-stats">
-      <h2>Base Stats</h2>
-      <div class="stats-grid">
-        @for (stat of pokemon.stats; track stat.stat.name) {
-          <div class="stat-item">
-            <span class="stat-name">@if (stat.stat.name === 'hp') {
-              {{ stat.stat.name | uppercase }}
-            } @else {
-              {{ stat.stat.name | titlecase }}
-            }</span>
-            <span class="stat-value">{{ stat.base_stat }}</span>
+        <mat-card-content>
+          <div class="types-section">
+            <h3>Types:</h3>
+            <div class="types-container">
+              @for (type of pokemon.types; track type.type.name) {
+                <mat-chip color="accent">{{ type.type.name | titlecase }}</mat-chip>
+              }
+            </div>
           </div>
-        }
-      </div>
-    </div>
 
-    <div class="pokemon-moves">
-      <h2>Moves</h2>
-      <div class="moves-grid">
-        @for (move of pokemon.moves.slice(0, 9); track move.move.name) {
-          <span class="move-item">{{ move.move.name | titlecase }}</span>
-        }
-      </div>
+          <mat-divider></mat-divider>
+
+          <div class="stats-section">
+            <h3>Base Stats:</h3>
+            <div class="stats-grid">
+              @for (stat of pokemon.stats; track stat.stat.name) {
+                <div class="stat-item">
+                  <span class="stat-name">
+                    @if (stat.stat.name === 'hp') {
+                      {{ stat.stat.name | uppercase }}
+                    } @else {
+                      {{ stat.stat.name | titlecase }}
+                    }
+                  </span>
+                  <span class="stat-value">{{ stat.base_stat }}</span>
+                </div>
+              }
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
+          <div class="moves-section">
+            <h3>Moves:</h3>
+            <div class="moves-container">
+              @for (move of pokemon.moves.slice(0, 9); track move.move.name) {
+                <mat-chip>{{ move.move.name | titlecase }}</mat-chip>
+              }
+            </div>
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)="goBack()">
+            <mat-icon>arrow_back</mat-icon>
+            Back to List
+          </button>
+        </mat-card-actions>
+      </mat-card>
     </div>
   </div>
 }

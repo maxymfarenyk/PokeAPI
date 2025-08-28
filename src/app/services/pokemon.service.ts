@@ -1,28 +1,41 @@
-import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { forkJoin, Observable, throwError, timer } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
-import { Pokemon } from '../types/pokemon.types';
+import {Injectable} from '@angular/core';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {forkJoin, Observable, throwError, timer, of} from 'rxjs';
+import {catchError, retry, switchMap} from 'rxjs/operators';
+import {Pokemon} from '../types/pokemon.types';
+import {MAX_POKEMON_ID, DEFAULT_POKEMON_COUNT, MAX_RETRIES, RETRY_DELAY, PIKACHU_ID} from '../constants/app.constants';
 
-const MAX_POKEMON_ID = 1025;
-const DEFAULT_POKEMON_COUNT = 15;
-const MAX_RETRIES = 3;
-const RETRY_DELAY = 1000; // 1 second
-
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class PokemonService {
   private apiUrl = 'https://pokeapi.co/api/v2/pokemon';
 
-  constructor(private http: HttpClient) {}
-  
-  getRandomPokemons(count = DEFAULT_POKEMON_COUNT): Observable<Pokemon[]> {
-    const ids = Array.from({ length: count }, () => Math.floor(Math.random() * MAX_POKEMON_ID) + 1);
-    const requests = ids.map(id => this.getPokemonWithRetry(id));
-    return forkJoin(requests);
+  constructor(private http: HttpClient) {
   }
 
   getPokemonById(id: number): Observable<Pokemon> {
     return this.getPokemonWithRetry(id);
+  }
+
+  getRandomPokemons(count = DEFAULT_POKEMON_COUNT): Observable<Pokemon[]> {
+    if (!navigator.onLine) {
+      return this.getPokemonById(PIKACHU_ID).pipe(
+        switchMap(pikachu => of([pikachu])),
+        catchError(() => of([]))
+      );
+    }
+
+    const ids = Array.from({length: count}, () => Math.floor(Math.random() * MAX_POKEMON_ID) + 1);
+
+    if (!ids.includes(PIKACHU_ID)) {
+      ids[0] = PIKACHU_ID;
+    }
+
+    const requests = ids.map(id => this.getPokemonWithRetry(id));
+    return forkJoin(requests);
+  }
+
+  get isOffline(): boolean {
+    return !navigator.onLine;
   }
 
   private getPokemonWithRetry(id: number): Observable<Pokemon> {
@@ -34,21 +47,28 @@ export class PokemonService {
           return timer(RETRY_DELAY);
         }
       }),
-      catchError(this.handleError)
+      catchError(error => this.handleError(error, id))
     );
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
+  private handleError(error: HttpErrorResponse, pokemonId?: number): Observable<never> {
     let errorMessage = 'An unknown error occurred';
 
     if (error.error instanceof ErrorEvent) {
-      // Client-side error
       errorMessage = `Client error: ${error.error.message}`;
     } else {
-      // Server-side error
-      errorMessage = `Server error: ${error.status} - ${error.message}`;
-
       switch (error.status) {
+        case 0:
+          if (!navigator.onLine) {
+            if (pokemonId === PIKACHU_ID) {
+              errorMessage = 'Network error. Pikachu is not available from cache.';
+            } else {
+              errorMessage = 'Network error. Only cached Pokémon is available offline.';
+            }
+          } else {
+            errorMessage = 'Some network error has happened.';
+          }
+          break;
         case 404:
           errorMessage = 'Pokemon not found';
           break;
@@ -58,13 +78,10 @@ export class PokemonService {
         case 500:
           errorMessage = 'Server error. Please try again later.';
           break;
-        case 0:
-          errorMessage = 'Network error. Please check your internet connection.';
-          break;
       }
     }
 
-    console.error('PokemonService error:', errorMessage);
+    console.error('PokemonService error:', errorMessage, pokemonId ? `(Pokemon ID: ${pokemonId})` : '');
     return throwError(() => new Error(errorMessage));
   }
 }
