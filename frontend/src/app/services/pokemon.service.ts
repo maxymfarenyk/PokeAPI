@@ -7,7 +7,7 @@ import {MAX_POKEMON_ID, DEFAULT_POKEMON_COUNT, MAX_RETRIES, RETRY_DELAY, PIKACHU
 
 @Injectable({providedIn: 'root'})
 export class PokemonService {
-  private apiUrl = 'https://pokeapi.co/api/v2/pokemon';
+  private apiUrl = 'http://localhost:8080/api/pokemon';
 
   constructor(private http: HttpClient) {
   }

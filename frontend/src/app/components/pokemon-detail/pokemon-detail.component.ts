@@ -11,6 +11,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
 import {OnlineStatusBannerComponent} from '../online-status-banner/online-status-banner.component';
+import { FormatLocationPipe } from '../../pipes/format-location.pipe';
 
 @Component({
   selector: 'app-pokemon-detail',
@@ -24,7 +25,8 @@ import {OnlineStatusBannerComponent} from '../online-status-banner/online-status
     MatToolbarModule,
     MatChipsModule,
     MatDividerModule,
-    OnlineStatusBannerComponent
+    OnlineStatusBannerComponent,
+    FormatLocationPipe
   ],
   templateUrl: './pokemon-detail.component.html',
   styleUrls: ['./pokemon-detail.component.scss']

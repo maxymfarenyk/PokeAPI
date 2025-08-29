@@ -20,6 +20,7 @@ export interface Pokemon {
       name: string;
     };
   }>;
+  location?: string;
 }
 
 export interface PokemonListItem {
@@ -27,4 +28,5 @@ export interface PokemonListItem {
   name: string;
   image: string;
   moves: string[];
+  location?: string;
 } 

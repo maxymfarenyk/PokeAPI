@@ -92,7 +92,8 @@
 
 .types-section,
 .stats-section,
-.moves-section {
+.moves-section,
+.location-section {
   margin: 20px 0;
 
   h3 {
@@ -104,7 +105,8 @@
 }
 
 .types-container,
-.moves-container {
+.moves-container,
+.location-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -152,3 +154,20 @@ mat-card-actions {
   display: flex;
   justify-content: center;
 }
+
+@keyframes pulseLocation {
+  0% {
+    background-color: #6fa8e0;
+  }
+  50% {
+    background-color: #add9ff;
+  }
+  100% {
+    background-color: #6fa8e0;
+  }
+}
+
+.location-pulse {
+  animation: pulseLocation 2s infinite;
+}
+
