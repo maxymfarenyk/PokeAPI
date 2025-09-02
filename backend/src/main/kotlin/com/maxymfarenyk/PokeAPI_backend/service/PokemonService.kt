@@ -14,19 +14,19 @@ const val BASE_URL = "https://pokeapi.co/api/v2/pokemon"
 class PokemonService(private val restTemplate: RestTemplate) {
 
     fun getPokemon(nameOrId: String): PokemonResponse? {
-        val RawPokemonData = try {
+        val rawPokemonData: RawPokemonData = try {
             restTemplate.getForObject<RawPokemonData>("$BASE_URL/$nameOrId")
         } catch (e: Exception) { return null } ?: return null
 
-        val locationName = getPokemonLocation(RawPokemonData.location_area_encounters)
+        val locationName = getPokemonLocation(rawPokemonData.location_area_encounters)
 
         return PokemonResponse(
-            id = RawPokemonData.id,
-            name = RawPokemonData.name,
-            sprites = Sprites(front_default = RawPokemonData.sprites.front_default),
-            types = RawPokemonData.types,
-            stats = RawPokemonData.stats,
-            moves = RawPokemonData.moves,
+            id = rawPokemonData.id,
+            name = rawPokemonData.name,
+            sprites = Sprites(front_default = rawPokemonData.sprites.front_default),
+            types = rawPokemonData.types,
+            stats = rawPokemonData.stats,
+            moves = rawPokemonData.moves,
             location = locationName
         )
     }
