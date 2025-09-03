@@ -1,26 +1,39 @@
 package com.maxymfarenyk.PokeAPI_backend.service
 
 import com.maxymfarenyk.PokeAPI_backend.model.*
+import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
-import org.springframework.web.client.RestTemplate
-import org.springframework.web.client.getForObject
-import org.springframework.web.client.exchange
-import org.springframework.http.HttpMethod
-import org.springframework.http.ResponseEntity
+import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.awaitBodyOrNull
 
 const val BASE_URL = "https://pokeapi.co/api/v2/pokemon"
 
 @Service
-class PokemonService(private val restTemplate: RestTemplate) {
+class PokemonService(private val webClient: WebClient) {
 
-    fun getPokemon(nameOrId: String): PokemonResponse? {
-        val rawPokemonData: RawPokemonData = try {
-            restTemplate.getForObject<RawPokemonData>("$BASE_URL/$nameOrId")
-        } catch (e: Exception) { return null } ?: return null
+    suspend fun getPokemon(nameOrId: String): PokemonResponse? = coroutineScope {
+        val rawPokemonData: RawPokemonData? = try {
+            webClient.get()
+                .uri("$BASE_URL/$nameOrId")
+                .retrieve()
+                .awaitBodyOrNull<RawPokemonData>()
+        } catch (e: Exception) {
+            null
+        }
 
-        val locationName = getPokemonLocation(rawPokemonData.location_area_encounters)
+        if (rawPokemonData == null) {
+            return@coroutineScope null
+        }
 
-        return PokemonResponse(
+        val locationDeferred = if (rawPokemonData.location_area_encounters.isNotEmpty()) {
+            async { getPokemonLocation(rawPokemonData.location_area_encounters) }
+        } else {
+            CompletableDeferred(null)
+        }
+
+        val locationName = locationDeferred.await()
+
+        PokemonResponse(
             id = rawPokemonData.id,
             name = rawPokemonData.name,
             sprites = Sprites(front_default = rawPokemonData.sprites.front_default),
@@ -31,19 +44,18 @@ class PokemonService(private val restTemplate: RestTemplate) {
         )
     }
 
-    private fun getPokemonLocation(locationUrl: String): String? {
+    private suspend fun getPokemonLocation(locationUrl: String): String? {
         return try {
             if (locationUrl.isEmpty()) return null
 
-            val locations: Array<LocationResponse>? =
-                restTemplate.getForObject(locationUrl, Array<LocationResponse>::class.java)
+            val locations: Array<LocationResponse>? = webClient.get()
+                .uri(locationUrl)
+                .retrieve()
+                .awaitBodyOrNull<Array<LocationResponse>>()
 
             locations?.firstOrNull()?.location_area?.name
         } catch (e: Exception) {
             null
         }
     }
-
 }
-
-

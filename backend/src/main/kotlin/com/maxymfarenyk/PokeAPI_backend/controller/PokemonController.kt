@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 class PokemonController(private val pokemonService: PokemonService) {
 
     @GetMapping("/{nameOrId}")
-    fun getPokemon(@PathVariable nameOrId: String): ResponseEntity<PokemonResponse> {
+    suspend fun getPokemon(@PathVariable nameOrId: String): ResponseEntity<PokemonResponse> {
         val pokemon = pokemonService.getPokemon(nameOrId)
         return if (pokemon != null) {
             ResponseEntity.ok(pokemon)

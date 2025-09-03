@@ -3,7 +3,7 @@ package com.maxymfarenyk.PokeAPI_backend.config
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.Resource
-import org.springframework.web.client.RestTemplate
+import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import org.springframework.web.servlet.resource.PathResourceResolver
@@ -12,8 +12,12 @@ import org.springframework.web.servlet.resource.PathResourceResolver
 class AppConfig : WebMvcConfigurer {
 
     @Bean
-    fun restTemplate(): RestTemplate {
-        return RestTemplate()
+    fun webClient(): WebClient {
+        return WebClient.builder()
+            .codecs { configurer ->
+                configurer.defaultCodecs().maxInMemorySize(16 * 1024 * 1024) // increased buffer size from 256kb to 16mb
+            }
+            .build()
     }
 
     override fun addResourceHandlers(registry: ResourceHandlerRegistry) {
