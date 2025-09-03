@@ -92,7 +92,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
             id: p.id,
             name: p.name,
             image: p.sprites.front_default,
-            moves: p.moves.slice(0, 2).map(m => m.move.name),
+            moves: p.moves.slice(0, 2).map(m => m.move.name)
           }));
           this.isLoading = false;
         },
@@ -126,7 +126,7 @@ export class PokemonListComponent implements OnInit, OnDestroy {
               id: pokemon.id,
               name: pokemon.name,
               image: pokemon.sprites.front_default,
-              moves: pokemon.moves.slice(0, 2).map(m => m.move.name),
+              moves: pokemon.moves.slice(0, 2).map(m => m.move.name)
             }];
           }
           this.isLoading = false;

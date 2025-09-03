@@ -49,6 +49,15 @@
 
           <mat-divider></mat-divider>
 
+          <div class="location-section">
+            <h3>Location:</h3>
+            <div class="location-container">
+              <mat-chip color="primary" class="location-pulse">{{ pokemon.location | formatLocation  }}</mat-chip>
+            </div>
+          </div>
+
+          <mat-divider></mat-divider>
+
           <div class="stats-section">
             <h3>Base Stats:</h3>
             <div class="stats-grid">

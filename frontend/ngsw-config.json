@@ -30,36 +30,14 @@
     {
       "name": "pikachu-cache",
       "urls": [
-        "https://pokeapi.co/api/v2/pokemon/25"
+        "/api/pokemon/25"
       ],
       "cacheConfig": {
         "strategy": "performance",
-        "maxSize": 1,
+        "maxSize": 10,
         "maxAge": "1d"
-      }
-    },
-    {
-      "name": "pokemon-api",
-      "urls": [
-        "https://pokeapi.co/api/v2/pokemon/**"
-      ],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 20,
-        "maxAge": "1h",
-        "timeout": "5s"
-      }
-    },
-    {
-      "name": "pokemon-images",
-      "urls": [
-        "https://raw.githubusercontent.com/PokeAPI/sprites/**"
-      ],
-      "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 20,
-        "maxAge": "1d"
-      }
+      },
+      "updateMode": "prefetch"
     }
   ]
 }
