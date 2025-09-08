@@ -1,20 +1,19 @@
 package com.maxymfarenyk.PokeAPI_backend.service
 
+import com.maxymfarenyk.PokeAPI_backend.config.PokemonApiProperties
 import com.maxymfarenyk.PokeAPI_backend.model.*
 import kotlinx.coroutines.*
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBodyOrNull
 
-const val BASE_URL = "https://pokeapi.co/api/v2/pokemon"
-
 @Service
-class PokemonService(private val webClient: WebClient) {
+class PokemonService(private val webClient: WebClient, private val properties: PokemonApiProperties) {
 
     suspend fun getPokemon(nameOrId: String): PokemonResponse? = coroutineScope {
         val rawPokemonData: RawPokemonData? = try {
             webClient.get()
-                .uri("$BASE_URL/$nameOrId")
+                .uri("${properties.baseUrl}/$nameOrId")
                 .retrieve()
                 .awaitBodyOrNull<RawPokemonData>()
         } catch (e: Exception) {
