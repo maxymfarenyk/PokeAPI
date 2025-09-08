@@ -6,18 +6,9 @@ data class RawPokemonData(
     val sprites: RawSprites,
     val types: List<TypeWrapper>,
     val stats: List<StatWrapper>,
-    val moves: List<MoveWrapper>,
-    val location_area_encounters: String
+    val moves: List<MoveWrapper>
 )
 
 data class RawSprites(
     val front_default: String
-)
-
-data class LocationResponse(
-    val location_area: LocationArea
-)
-
-data class LocationArea(
-    val name: String
 )

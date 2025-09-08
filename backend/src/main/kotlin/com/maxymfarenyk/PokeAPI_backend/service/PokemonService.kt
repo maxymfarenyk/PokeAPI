@@ -8,39 +8,42 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.awaitBodyOrNull
 
 @Service
-class PokemonService(private val webClient: WebClient, private val properties: PokemonApiProperties) {
+class PokemonService(
+    private val webClient: WebClient,
+    private val properties: PokemonApiProperties,
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+) {
 
-    suspend fun getPokemon(nameOrId: String): PokemonResponse? = coroutineScope {
-        val rawPokemonData: RawPokemonData? = try {
-            webClient.get()
-                .uri("${properties.baseUrl}/$nameOrId")
-                .retrieve()
-                .awaitBodyOrNull<RawPokemonData>()
+    suspend fun getPokemon(nameOrId: String): PokemonResponse? {
+        return try {
+
+            val rawPokemonDeferred = scope.async {
+                webClient.get()
+                    .uri("${properties.baseUrl}/$nameOrId")
+                    .retrieve()
+                    .awaitBodyOrNull<RawPokemonData>()
+            }
+
+            val locationDeferred = scope.async {
+                getPokemonLocation("${properties.baseUrl}/$nameOrId/encounters")
+            }
+
+            val rawPokemonData = rawPokemonDeferred.await() ?: return null
+            val locationName = locationDeferred.await()
+
+            PokemonResponse(
+                id = rawPokemonData.id,
+                name = rawPokemonData.name,
+                sprites = Sprites(front_default = rawPokemonData.sprites.front_default),
+                types = rawPokemonData.types,
+                stats = rawPokemonData.stats,
+                moves = rawPokemonData.moves,
+                location = locationName
+            )
+
         } catch (e: Exception) {
             null
         }
-
-        if (rawPokemonData == null) {
-            return@coroutineScope null
-        }
-
-        val locationDeferred = if (rawPokemonData.location_area_encounters.isNotEmpty()) {
-            async { getPokemonLocation(rawPokemonData.location_area_encounters) }
-        } else {
-            CompletableDeferred(null)
-        }
-
-        val locationName = locationDeferred.await()
-
-        PokemonResponse(
-            id = rawPokemonData.id,
-            name = rawPokemonData.name,
-            sprites = Sprites(front_default = rawPokemonData.sprites.front_default),
-            types = rawPokemonData.types,
-            stats = rawPokemonData.stats,
-            moves = rawPokemonData.moves,
-            location = locationName
-        )
     }
 
     private suspend fun getPokemonLocation(locationUrl: String): String? {
