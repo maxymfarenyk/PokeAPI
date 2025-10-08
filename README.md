@@ -1,149 +1,73 @@
-# 🎮 PokeAPI PWA - Angular Application
+# 🐾 PokeAPI Application
 
-A modern Progressive Web Application built with Angular and Material Design that displays Pokémon data from the PokeAPI with TypeScript interfaces and optimized data architecture.
+A full-stack Pokémon application featuring a web interface (frontend) and API server (backend) for browsing and exploring Pokémon data.
 
-## ✨ Features
+## 📋 Project Description
 
-- **Pokémon List**: Display random Pokémon with basic information
-- **Detailed View**: Navigate to individual Pokémon pages with comprehensive stats
-- **PWA Support**: Offline access, installable, service worker caching
-- **Connection Status**: Real-time network connectivity indicator
-- **Loading States**: Visual feedback during data fetching
-- **Error Handling**: Graceful error handling with retry functionality
-- **Sorting**: Sort Pokémon by name and moves
-- **404 Page**: Custom not-found page for invalid routes
+This application provides a user-friendly interface for viewing Pokémon information, including their stats, evolutions, abilities, and other data from the official PokéAPI. The project includes both a client-side interface for user interaction and a server-side component for request processing and data caching.
 
-## 🚀 Getting Started
+## 🏗️ Architecture
 
-### Prerequisites
-- Node.js (version 18 or higher)
-- npm or yarn
+### Frontend
+- **Technologies**: Angular Framework
+- **Features**:
+  - **Pokémon List**: Display random Pokémon with basic information
+  - **Detailed View**: Navigate to individual Pokémon pages with comprehensive stats
+  - **PWA Support**: Offline access, installable, service worker caching
+  - **Angular Material**: Styles were created using Angular Material
+  - **Connection Status**: Real-time network connectivity indicator
+  - **Loading States**: Visual feedback during data fetching
+  - **Error Handling**: Graceful error handling with retry functionality
+  - **Sorting**: Sort Pokémon by name and moves
+  - **404 Page**: Custom not-found page for invalid routes
 
-### Installation
 
-1. **Clone and install**
-   ```bash
-   git clone <repository-url>
-   cd PokeAPI
-   npm install
-   ```
+### Backend
+- **Technologies**: Kotlin Spring Boot
+- **Features**:
+  - **RESTful API**: For request handling
+  - **PokeAPI**: Backend serves as proxy to official PokeAPI
+  - **Async Processing**: Using Kotlin coroutines for getting Pokemon and PokemonLocation data asynchronously
+  - **Error handling and data validation**
 
-2. **Start development server**
-   ```bash
-   npm start
-   ```
+## 📸 Screenshots
 
-3. **Build for PWA**
-  ```bash
-  npm run build
-  npm run serve-pwa
-  ```
+| Home Page |
+|-----|
+| <img width="1220" height="700" alt="image" src="https://github.com/user-attachments/assets/1a167c31-71bd-4e33-b081-e86ba50d0d1f" /> |
 
-4. **Open browser**
-   Navigate to `http://localhost:4200`
+| Details Page |
+|-----|
+|  <img width="420" alt="image" src="https://github.com/user-attachments/assets/ded21b83-af8f-47c0-991d-4842ff0bcb21" /> |
+| <img width="420" alt="image" src="https://github.com/user-attachments/assets/97a6b12c-730e-4d98-9ce4-62261bf1b990" /> |
+| <img width="420" alt="image" src="https://github.com/user-attachments/assets/273be246-d5e6-4d7c-b72f-8c3ab105dec6" /> |
 
-## 📁 Project Structure
+## 🔧 API Endpoints
 
-```
-src/app/
-├── components/
-│   ├── not-found/                   # 404 page
-│   ├── online-status-banner/        # Network status indicator
-│   ├── pokemon-detail/              # Pokémon details 
-│   └── pokemon-list/                # Main Pokémon list
-├── constants/
-│   └── app.constants.ts             # Application constants
-├── services/
-│   ├── online-status.service.ts     # Network connectivity monitoring
-│   └── pokemon.service.ts           # API service with caching
-├── types/
-│   └── pokemon.types.ts             # TypeScript interfaces
-├── app.config.ts                    # App configuration
-├── app.routes.ts                    # Routing
-└── app.ts                           # Root component
-```
+### Backend Routes
 
-## 🏗️ Data Architecture
+- `GET /api/pokemon` - List of all Pokémon
+- `GET /api/pokemon/{nameOrId}` - Information about a specific Pokémon
 
-### TypeScript Interfaces
+### Frontend Routes
 
-**Pokemon** (Complete Data):
-```typescript
-interface Pokemon {
-  id: number;
-  name: string;
-  sprites: { front_default: string };
-  types: Array<{ type: { name: string } }>;
-  stats: Array<{ stat: { name: string }; base_stat: number }>;
-  moves: Array<{ move: { name: string } }>;
-}
+- `GET /pokemon` -  Render a page with list of all Pokémon
+- `GET /pokemon/{id}` - Render a page with information about a specific Pokémon
+
+## 🚀 Quick Start with Docker
+
+### Run from Docker Hub
+
+The easiest way to run the application locally:
+
+```bash
+# Pull and run the container
+docker pull maxfarenyk/pokeapi
+docker run -p 8080:8080 maxfarenyk/pokeapi
 ```
 
-**PokemonListItem** (Optimized for List):
-```typescript
-interface PokemonListItem {
-  id: number;
-  name: string;
-  image: string;
-  moves: string[];
-}
-```
+After running, the application will be available at: `http://localhost:8080`
 
-### Benefits
-- **Type Safety**: Compile-time error detection
-- **Performance**: Optimized data structures for different views
-- **Maintainability**: Clear data contracts and separation of concerns
+## 📝 License
 
-## 📱 PWA Features
-
-- **Offline Support**: Browse previously visited Pokémon without internet
-- **Installable**: Add to home screen on mobile and desktop
-- **Service Worker**: Background sync and caching strategies
-- **Performance**: Cache-first strategy for images and API data
-
-### PWA Installation
-**Desktop**: Click install prompt in browser address bar  
-**Mobile**: Browser menu → "Add to Home Screen"
-
-## 🎨 Material Design
-
-- **Angular Material**: Complete Material Design component library
-- **Components Used**: mat-card, mat-toolbar, mat-button, mat-progress-spinner, mat-snack-bar, mat-icon, mat-badge
-- **Responsive Design**: Mobile-first approach with Material guidelines
-- **Accessibility**: Full WCAG compliance with Material components
-
-## 🎮 How to Use
-
-- **Main Page**: View and sort Pokémon list, click cards for details, check connection status banner
-- **Detail Page**: View comprehensive stats, types, and moves
-- **Connection Status**: Real-time indicator shows network connectivity
-- **Offline Mode**: Previously viewed Pokémon remain accessible when offline
-- **Navigation**: Use "Back to List" button to return
-
-## 🔧 Technical Stack
-
-- **Angular 17+**: Standalone components
-- **Angular Material**: Material Design component library
-- **TypeScript**: Full type safety
-- **Angular Service Worker**: PWA functionality
-- **RxJS**: Reactive programming
-- **SCSS**: Advanced styling with Material theming
-- **PokeAPI**: Pokémon data source
-
-## 🐛 Error Handling
-
-- Network errors with retry logic
-- 404 page for invalid routes
-- User-friendly error messages
-- Offline mode indicators and cached content fallbacks
-
-## 🚀 Future Enhancements
-
-- Search functionality
-- Favorites system
-- Advanced filtering
-- Evolution chains
-
----
-
-**Install as PWA for the best Pokémon hunting experience! 🎮✨📱**
+Personal project for educational and portfolio purpose.
